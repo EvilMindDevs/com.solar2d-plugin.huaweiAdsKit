@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.huawei.agconnect'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    implementation ':Corona@aar'
+    implementation 'com.huawei.hms:ads-lite:13.4.37.300'
+}
+
+task extractPluginFromAAR(type: Copy) {
+    group "Corona"
+    dependsOn "assembleRelease"
+    from {
+        zipTree("build/outputs/aar/${project.name}-release.aar").matching { include '**/classes.jar' }.singleFile
+    }
+    into('build/outputs')
+    rename ('classes.jar', 'plugin.huaweiAdsKit.jar')
+}
